@@ -9,10 +9,24 @@ import AdminLayout from "../admin/layouts/adminLayout";
 import AdminProtectedRoutes from "./AdminProtectedRoutes";
 import { AdminLoginPage } from "../admin/pages/auth/LoginPage";
 import AdminRegisterPage from "../admin/pages/auth/RegisterPage";
+import FormLogin from "../components/forms/FormLogin";
+
 const router = createBrowserRouter([
   {
     path: "*",
     element: <div>Routes Not Found!</div>,
+  },
+  {
+    children: [
+      {
+        path: "/",
+        element: <FormLogin />,
+      },
+      {
+        path: "/register",
+        element: <FormLogin />,
+      },
+    ],
   },
   {
     children: [
