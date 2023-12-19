@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
-import { IoMdLogOut } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import "./sidebar.css";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
