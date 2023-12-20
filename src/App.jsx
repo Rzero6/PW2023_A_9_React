@@ -9,6 +9,7 @@ import Pesanan from "./user/Pages/Pesanan";
 import Review from "./user/Pages/Review";
 import Search from "./user/Pages/Search";
 import Register from "./user/Pages/Register";
+import Riwayat from "./user/Pages/Riwayat";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/review" element={<Review/>} />
         <Route path="/search" element={<Search/>} />
         <Route path="/register" element={<Register/>} />
+        <Route path="/riwayat" element={<Riwayat/>} />
       </Routes>
     </Router>
     </>

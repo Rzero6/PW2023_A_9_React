@@ -2,7 +2,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faCar } from "@fortawesome/free-solid-svg-icons";
 import "./NavbarStyle.css";
 
-const Navbar = () => {
+const Navbar = ({page, pathUrl}) => {
+
+  // mengecek apakah user memiliki cookie
+  const hasCookie = document.cookie.length > 0;
+
+
+  // handle logout
+  const handleLogout = () => {
+    // Remove all cookies by setting their expiration dates to the past
+    document.cookie.split(";").forEach((cookie) => {
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    });
+
+    window.location.reload()
+  };
+
   return (
     <div>
       <div
@@ -35,16 +52,20 @@ const Navbar = () => {
           <hr className="m-0" />
           <a
             className="btn d-flex align-items-center p-3 rounded-0"
-            href="/pesanan"
+            href={pathUrl || "/pesanan"}
           >
             <FontAwesomeIcon icon={faCar} className="me-3" />
-            Pesanan
+            {page || "Pesanan"}
           </a>
           <hr className="m-0" />
         </div>
         <div className="offcanvas-footer">
           <div className="d-flex justify-content-center">
-            <button className="btn btn-danger flex-grow-1 m-3">Logout</button>
+          {hasCookie && (
+            <button className="btn btn-danger me-2 flex-grow-1 m-3" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
           </div>
         </div>
       </div>
@@ -59,18 +80,24 @@ const Navbar = () => {
             />{" "}
             rentalmobil.com
           </a>
-          <a
-            className="text-decoration-none btn text-white d-flex align-items-center"
-            data-bs-toggle="offcanvas"
-            href="#offcanvasProfil"
-            role="button"
-          >
-            <FontAwesomeIcon
-              icon={faUser}
-              className="border border-2 border-light rounded-circle p-2 me-2"
-            />{" "}
-            Kunarto Dira Patsy
-          </a>
+          {hasCookie ? (
+            <a
+              className="text-decoration-none btn text-white d-flex align-items-center"
+              data-bs-toggle="offcanvas"
+              href="#offcanvasProfil"
+              role="button"
+            >
+              <FontAwesomeIcon
+                icon={faUser}
+                className="border border-2 border-light rounded-circle p-2 me-2"
+              />
+              Kunarto Dira Patsy
+            </a>
+          ) : (
+            <a className="btn me-2" href="/login" style={{backgroundColor: 'white'}}>
+              Login
+            </a>
+          )}
         </div>
       </nav>
       <br></br>

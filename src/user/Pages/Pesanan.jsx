@@ -4,7 +4,7 @@ import Navbar from "../Components/Partials/Navbar/Navbar";
 const Pesanan = () => {
     return(
         <>
-        <Navbar/>
+        <Navbar page="Riwayat Pesanan" pathUrl="/riwayat"/>
         <PesananComponent/>
         </>
     )
