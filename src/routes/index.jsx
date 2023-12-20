@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Home from "../admin/pages/HomePage";
-import Cabang from "../admin/pages/Cabang";
-import User from "../admin/pages/UserPage";
-import Mobil from "../admin/pages/MobilPage";
-import Transaksi from "../admin/pages/TransaksiPage";
+import Cabang from "../admin/pages/cabang/Cabang";
+import User from "../admin/pages/user/UserPage";
+import Mobil from "../admin/pages/mobil/MobilPage";
+import Transaksi from "../admin/pages/transaksi/TransaksiPage";
 import AdminLayout from "../admin/layouts/adminLayout";
 import AdminProtectedRoutes from "./AdminProtectedRoutes";
 import { AdminLoginPage } from "../admin/pages/auth/LoginPage";

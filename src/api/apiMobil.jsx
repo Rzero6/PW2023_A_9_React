@@ -58,9 +58,9 @@ export const CreateMobil = async (data) => {
 
 export const UpdateMobil = async (data) => {
   try {
-    const response = await useAxios.patch(`/mobil/${data.id}`, values, {
+    const response = await useAxios.patch(`/mobil/${data.id}`, data, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     });

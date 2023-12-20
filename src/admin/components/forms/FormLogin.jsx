@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Alert, Spinner, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import InputFloatingForm from "./InputFloatingForm";
+import InputFloatingForm from "./InputFloatingFormLight";
 import { SignIn } from "../../../api/apiAuthAdmin";
 const FormLogin = () => {
   const navigate = useNavigate();
@@ -69,7 +69,6 @@ const FormLogin = () => {
         onChange={handleChange}
       />
       <Button
-        variant="primary"
         type="submit"
         disabled={isDisabled || loading}
         className="mt-3 w-100 border-0 buttonSubmit btn-lg"

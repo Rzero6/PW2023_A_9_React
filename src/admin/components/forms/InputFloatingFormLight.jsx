@@ -1,5 +1,5 @@
 import { Form, FloatingLabel } from "react-bootstrap";
-const InputFloatingForm = (props) => {
+const InputFloatingFormLight = (props) => {
   return (
     <Form.Group className="mb-3" controlId={props.name}>
       <FloatingLabel className="fw-bold text-light" label={props.label}>
@@ -12,4 +12,4 @@ const InputFloatingForm = (props) => {
     </Form.Group>
   );
 };
-export default InputFloatingForm;
+export default InputFloatingFormLight;

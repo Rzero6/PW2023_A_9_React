@@ -1,14 +1,11 @@
-/* Home */
 .home {
   display: flex;
 }
 
-/* Home container */
 .home .homeContainer {
   flex: 6;
 }
 
-/* Widgets and Charts */
 .home .homeContainer .widgets,
 .home .homeContainer .charts {
   display: flex;
@@ -16,12 +13,10 @@
   gap: 20px;
 }
 
-/* Adjusted padding for Charts */
 .home .homeContainer .charts {
   padding: 5px 20px;
 }
 
-/* List Container */
 .home .homeContainer .listContainer {
   -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
   box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
@@ -29,7 +24,6 @@
   margin: 20px;
 }
 
-/* List Title */
 .home .homeContainer .listContainer .listTitle {
   font-weight: 500;
   color: gray;
