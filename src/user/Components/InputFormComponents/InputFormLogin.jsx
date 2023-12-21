@@ -23,6 +23,9 @@ const InputFormLogin = () => {
       setIsDisabled(true);
     }
   };
+  const handleAdminButton = () => {
+    navigate("/admin");
+  };
   //Using Axios
   const Login = (event) => {
     event.preventDefault();
@@ -82,6 +85,9 @@ const InputFormLogin = () => {
       <p className="text-end mt-2 text-white">
         Belum Punya Akun? <Link to="/register">Klik Sini!</Link>
       </p>
+      <Button variant="primary" className="w-100" onClick={handleAdminButton}>
+        Halaman Admin
+      </Button>
     </Form>
   );
 };
