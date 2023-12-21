@@ -11,16 +11,13 @@ export const AdminLoginPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const tokenDariSS = sessionStorage.getItem("token");
-    const role = JSON.parse(sessionStorage.getItem("user")).role;
     setToken(tokenDariSS);
-    setRole(role);
-    if (tokenDariSS && role !== 0) {
-      toast.dark("access denied");
+    if (tokenDariSS) {
       navigate("/admin/dashboard");
     }
   }, [navigate]);
   return (
-    role !== 1 && (
+    !token && (
       <Container className="login-container">
         <div className="login-box">
           <div className="text-center mb-3">
