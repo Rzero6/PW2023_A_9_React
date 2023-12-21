@@ -56,3 +56,17 @@ export const DeleteUser = async (id) => {
     throw error.response.data;
   }
 };
+
+export const UpdateProfilPic = async (data) => {
+  try {
+    const response = await useAxios.post(`/user`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

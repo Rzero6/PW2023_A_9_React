@@ -1,15 +1,13 @@
-import Navbar from "../Components/Partials/Navbar/Navbar";
 import Footer from "../Components/Partials/Footer/Footer";
 import HomeComponents from "../Components/HomeComponents/HomeComponents";
-
+import "./index.css";
 const Home = () => {
-    return(
-        <>
-        <Navbar/>
-        <HomeComponents/>
-        <Footer/>
-        </>
-    )
-}
+  return (
+    <>
+      <HomeComponents />
+      <Footer />
+    </>
+  );
+};
 
 export default Home;

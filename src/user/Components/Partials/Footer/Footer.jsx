@@ -1,7 +1,7 @@
 const Footer = () => {
-    return(
+  return (
     <>
-     <footer className="mt-5 bg-footer text-light">
+      <footer className="bg-dark mt-5 bg-footer text-light">
         <div className="container p-3">
           <div className="row">
             <div className="col-md-3">
@@ -54,8 +54,7 @@ const Footer = () => {
                   <i className="fa-solid fa-phone"></i> +1 (123) 456-7890
                 </p>
                 <p>
-                  <i className="fa-solid fa-envelope"></i>{' '}
-                  info@rentalmobil.com
+                  <i className="fa-solid fa-envelope"></i> info@rentalmobil.com
                 </p>
               </address>
             </div>
@@ -83,16 +82,20 @@ const Footer = () => {
           <p>&copy; {new Date().getFullYear()} Rental Mobil</p>
           <ul className="list-inline">
             <li className="list-inline-item">
-              <a href="/privacy-policy">Kebijakan Privasi</a>
+              <a href="https://policies.google.com/privacy?hl=en">
+                Kebijakan Privasi
+              </a>
             </li>
             <li className="list-inline-item">
-              <a href="/terms-and-conditions">Syarat & Ketentuan</a>
+              <a href="https://policies.google.com/terms?hl=en">
+                Syarat & Ketentuan
+              </a>
             </li>
           </ul>
         </div>
       </div>
     </>
-    )
-}
+  );
+};
 
 export default Footer;

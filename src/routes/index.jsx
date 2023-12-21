@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import Home from "../admin/pages/HomePage";
+import HomeAdmin from "../admin/pages/HomePage";
 import Cabang from "../admin/pages/cabang/Cabang";
 import User from "../admin/pages/user/UserPage";
 import Mobil from "../admin/pages/mobil/MobilPage";
@@ -9,8 +9,16 @@ import AdminLayout from "../admin/layouts/adminLayout";
 import AdminProtectedRoutes from "./AdminProtectedRoutes";
 import { AdminLoginPage } from "../admin/pages/auth/LoginPage";
 import AdminRegisterPage from "../admin/pages/auth/RegisterPage";
-import FormLogin from "../components/forms/FormLogin";
-
+import ProtectedRoutes from "./ProtectedRoutes";
+import Login from "../user/Pages/Login";
+import Register from "../user/Pages/Register";
+import UserLayout from "../user/Layout/UserLayout";
+import Home from "../user/Pages/Home";
+import Profile from "../user/Pages/Profile";
+import Pesanan from "../user/Pages/Pesanan";
+import Riwayat from "../user/Pages/Riwayat";
+import Review from "../user/Pages/Review";
+import Search from "../user/Pages/Search";
 const router = createBrowserRouter([
   {
     path: "*",
@@ -20,11 +28,45 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <FormLogin />,
+        element: <Login />,
       },
       {
         path: "/register",
-        element: <FormLogin />,
+        element: <Register />,
+      },
+    ],
+  },
+  {
+    path: "/home",
+    element: (
+      <ProtectedRoutes>
+        <UserLayout />
+      </ProtectedRoutes>
+    ),
+    children: [
+      {
+        path: "/home",
+        element: <Home />,
+      },
+      {
+        path: "/home/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/home/pesanan",
+        element: <Pesanan />,
+      },
+      {
+        path: "/home/riwayat",
+        element: <Riwayat />,
+      },
+      {
+        path: "/home/review",
+        element: <Review />,
+      },
+      {
+        path: "/home/search",
+        element: <Search />,
       },
     ],
   },
@@ -50,7 +92,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/admin/dashboard",
-        element: <Home />,
+        element: <HomeAdmin />,
       },
       {
         path: "/admin/dashboard/user",

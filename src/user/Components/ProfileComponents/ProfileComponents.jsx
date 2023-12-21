@@ -1,58 +1,139 @@
+import {
+  Container,
+  Stack,
+  Button,
+  Spinner,
+  Alert,
+  Card,
+  Col,
+  Row,
+} from "react-bootstrap";
+import { useState } from "react";
+import { getProfilPic } from "../../../api";
+import { FaImage, FaPlusSquare } from "react-icons/fa";
+import { UpdateProfilPic } from "../../../api/apiUser";
+import { GetUserById } from "../../../api/apiUser";
+import { toast } from "react-toastify";
+import { Loading } from "../../../admin/components/loading/Loading";
 const ProfileComponents = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(JSON.parse(sessionStorage.getItem("user")));
+  const [isPending, setIsPending] = useState(false);
+  const [thumbnail, setThumbnail] = useState(null);
+  const handleThumbnail = (event) => {
+    setThumbnail(event.target.files[0]);
+  };
+  const fetchUser = () => {
+    setIsLoading(true);
+    const id = JSON.parse(sessionStorage.getItem("user").id);
+    GetUserById(id)
+      .then((response) => {
+        setUser(response);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+        toast.dark(JSON.stringify(err.message));
+      });
+  };
+
+  const updateProfilPic = () => {
+    const formData = new FormData();
+    formData.append("profil_pic", thumbnail);
+    UpdateProfilPic(formData)
+      .then((response) => {
+        setIsPending(false);
+        toast.success(response.message);
+        fetchUser();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+        toast.dark(JSON.stringify(err.message));
+      });
+  };
   return (
-    <>
-    <div className="container d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
-      <div className="card-body text-center">
-        <h5 className="mb-3">Profile</h5>
-        <div className="mb-2">
-          <label htmlFor="namaLengkap"><strong>Nama Lengkap:</strong></label>
-          <p className="form-control mx-auto" id="namaLengkap"
-            style={{ maxWidth: '300px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-            Kunarto Dira Patsy
-          </p>
+    <Container className="mt-4">
+      {isLoading ? (
+        <div
+          className="d-flex align-items-center justify-content-center"
+          style={{ height: "75vh" }}
+        >
+          <Loading />
         </div>
-        <div className="mb-2">
-          <label htmlFor="email"><strong>Email:</strong></label>
-          <p className="form-control mx-auto" id="email"
-            style={{ maxWidth: '300px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-            rendir@gmail.com
-          </p>
-        </div>
-        <div className="mb-2">
-          <label htmlFor="alamat"><strong>Alamat:</strong></label>
-          <p className="form-control mx-auto" id="alamat"
-            style={{ maxWidth: '300px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-            Jalan Babarsari No 153
-          </p>
-        </div>
-        <div className="mb-2">
-          <label htmlFor="nomorTelepon"><strong>Nomor Telepon:</strong></label>
-          <p className="form-control mx-auto" id="nomorTelepon"
-            style={{ maxWidth: '300px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-            081345678906
-          </p>
-        </div>
-        <div className="mb-2">
-          <label htmlFor="tanggalLahir"><strong>Tanggal Lahir:</strong></label>
-          <p className="form-control mx-auto" id="tanggalLahir"
-            style={{ maxWidth: '300px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-            10-10-2000
-          </p>
-        </div>
-        <div className="mb-2">
-          <label className="row" htmlFor="fotoKTP"><strong>Foto KTP:</strong></label>
-          <img
-            src="https://picsum.photos/id/237/200/300.jpg"
-            className="img-fluid mx-auto"
-            style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-            alt="Foto KTP"
-          />
-        </div>
-        <a className="btn btn-success" href="/editProf">Ubah Profil</a>
-      </div>
-    </div>
-    </>
+      ) : (
+        <>
+          <Stack direction="horizontal" gap={3} className="mb-3">
+            <h1 className="h4 text-white fw-bold mb-0 text-nowrap">Profil</h1>
+            <hr className="border-top border-light opacity-50 w-100" />
+          </Stack>
+          <Card className="p-3">
+            <div className="d-flex justify-content-md-start">
+              <div
+                className="d-flex img-preview text-center position-relative mb-3"
+                style={{ aspectRatio: "16 / 9", maxWidth: "50vh" }}
+              >
+                {thumbnail ? (
+                  <img
+                    src={URL.createObjectURL(thumbnail)}
+                    alt="Not Found"
+                    className="img-fluid object-fit-cover"
+                    style={{ width: "400px", height: "300px" }}
+                  />
+                ) : user.profil_pic.startsWith("http") ? (
+                  <img
+                    src={user.profil_pic}
+                    alt="Not Found"
+                    className="img-fluid object-fit-cover"
+                    style={{ width: "400px", height: "300px" }}
+                  />
+                ) : (
+                  <img
+                    src={getProfilPic(user.profil_pic)}
+                    alt="Not Found"
+                    className="img-fluid object-fit-cover"
+                    style={{ width: "400px", height: "300px" }}
+                  />
+                )}
+                <Button
+                  variant="primary"
+                  type="button"
+                  disabled={isPending}
+                  size="sm"
+                  className="w-fit h-fit position-absolute bottom-0 end-0 me-3 mb-3"
+                  onClick={() => document.getElementById("thumbnail").click()}
+                >
+                  <FaImage /> Pilih Gambar
+                </Button>
+                {/* Input type file yang disembunyikan, diakses pakai tombol diatas */}
+                <input
+                  type="file"
+                  name="thumbnail"
+                  id="thumbnail"
+                  className="d-none"
+                  onChange={handleThumbnail}
+                  accept="image/*"
+                />
+              </div>
+              <div className="flex-grow-1 px-4">
+                <h1>
+                  <strong>{user.nama}</strong>
+                </h1>
+                <p>{user.email}</p>
+                <Stack gap={2}>
+                  <Button>Edit Profil</Button>
+                  <Button disabled={!thumbnail} onClick={updateProfilPic}>
+                    Simpan Gambar
+                  </Button>
+                </Stack>
+              </div>
+            </div>
+          </Card>
+        </>
+      )}
+    </Container>
   );
-}
+};
 
 export default ProfileComponents;

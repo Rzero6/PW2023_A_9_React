@@ -1,42 +1,74 @@
-import CarCard from "../CarCard/CarCard";
-import "./MainContentRiwayatStyle.css"
+import { Container, Row, Col, Card, Stack, Alert } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { Loading } from "../../../../admin/components/loading/Loading";
 
 const MainContentRiwayat = () => {
-  const carsData = [
-    {
-      imageUrl:
-        "https://static.wixstatic.com/media/80e573_756d54c0b87947e59bf26df872a1b6c6~mv2.png/v1/crop/x_341,y_81,w_1259,h_556/fill/w_824,h_400,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_auto/Car%20Subscription%20New%20Zealand%20-%20Snap%20Subscribe.png",
-      title: "Volkswagen",
-      description: "",
-      date: "20-10-2023",
-      reviewUrl: "/review",
-    },
-    {
-      imageUrl: "https://assets.fastly.carvana.io/home-assets/nba/civic.png",
-      title: "Honda Civic",
-      description:
-        "Boleh lah ini mobil, untuk keluarga yang ga terlalu banyak, nyaman dan sporty.",
-      date: "15-09-2023",
-      reviewUrl: "",
-    },
-    {
-      imageUrl:
-        "https://cdni.autocarindia.com/utils/imageresizer.ashx?n=https://cms.haymarketindia.net/model/uploads/modelimages/Hyundai-Grand-i10-Nios-200120231541.jpg",
-      title: "Hyundai Grand i10 NIOS",
-      description: "mobil ini sangat nyaman dan hemat",
-      date: "15-06-2023",
-      reviewUrl: "",
-    },
-  ];
+  const [isLoading, setIsLoading] = useState(true);
+  const [transaksiDone, setTransaksiDone] = useState([]);
+  const [transaksiReviewed, setTransaksiReviewed] = useState([]);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const transaksiSelesai = await GetTransaksiByUserAndStatus("selesai");
+      const transaksiDinilai = await GetTransaksiByUserAndStatus("dinilai");
+      setTransaksiDone(transaksiSelesai);
+      setTransaksiReviewed(transaksiDinilai);
+      setMobil(mobilResponse);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <div className="container mt-5">
-        <h5 class="card-title center-text mb-5">Riwayat Pesanan Anda</h5>
-      {carsData.map((car) => (
-        <CarCard key={car.title} carData={car} />
-      ))}
-    </div>
+    <Container style={{ height: "90vh" }}>
+      <Stack direction="horizontal" gap={3} className="mb-3">
+        <h1 className="h4 fw-bold mb-0 text-white text-nowrap">Selesai</h1>
+        <hr className="border-top border-light opacity-50 w-100" />
+        <div className="ms-auto text-nowrap"></div>
+      </Stack>
+      <Row>
+        {isLoading ? (
+          <div className="d-flex align-items-center justify-content-center">
+            <Loading />
+          </div>
+        ) : transaksiDone.lenght > 0 ? (
+          <Col>
+            <Card></Card>
+          </Col>
+        ) : (
+          <Alert variant="secondary" className="mt-3 text-center">
+            Belum ada yang disewa, ayo nyewa!
+          </Alert>
+        )}
+      </Row>
+      <Stack direction="horizontal" gap={3} className="mb-3">
+        <h1 className="h4 fw-bold mb-0 text-white text-nowrap">Dinilai</h1>
+        <hr className="border-top border-light opacity-50 w-100" />
+        <div className="ms-auto text-nowrap"></div>
+      </Stack>
+      <Row>
+        {isLoading ? (
+          <div className="d-flex align-items-center justify-content-center">
+            <Loading />
+          </div>
+        ) : transaksiReviewed.lenght > 0 ? (
+          <Col>
+            <Card></Card>
+          </Col>
+        ) : (
+          <Alert variant="secondary" className="mt-3 text-center">
+            Belum ada yang dinilai
+          </Alert>
+        )}
+      </Row>
+    </Container>
   );
 };
-
 
 export default MainContentRiwayat;

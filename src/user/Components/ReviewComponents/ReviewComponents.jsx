@@ -1,5 +1,3 @@
-import "./ReviewComponentsStyle.css"
-
 const ReviewComponents = () => {
   return (
     <>
@@ -31,4 +29,4 @@ const ReviewComponents = () => {
   );
 };
 
-export default ReviewComponents
+export default ReviewComponents;

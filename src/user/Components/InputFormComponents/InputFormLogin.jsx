@@ -1,58 +1,89 @@
-import React, { useState } from 'react';
+import React from "react";
+import { useState } from "react";
+import { Button, Alert, Spinner, Form } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import InputFloatingForm from "../../../admin/components/forms/InputFloatingFormLight";
+import { SignIn } from "../../../api/apiAuthUser";
 
 const InputFormLogin = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // Simulate successful login since we don't have user data yet
-    if (username.trim() !== '' && password.trim() !== '') {
-      // Set the cookie for authentication
-      document.cookie = `username=${username}; expires=Thu, 18 Dec 2024 12:00:00 UTC; path=/`;
-
-      // Redirect to the logged-in page (replace with your actual logic)
-      window.location.href = '/';
+  const navigate = useNavigate();
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const handleChange = (event) => {
+    const newData = { ...data, [event.target.name]: event.target.value };
+    setData(newData);
+    if (newData.email.trim().length > 0 && newData.password.length > 0) {
+      setIsDisabled(false);
     } else {
-      // Handle invalid login attempt (e.g., display an error message)
+      setIsDisabled(true);
     }
   };
-
+  //Using Axios
+  const Login = (event) => {
+    event.preventDefault();
+    setLoading(true);
+    SignIn(data)
+      .then((res) => {
+        navigate("/home");
+        sessionStorage.setItem("token", res.access_token);
+        sessionStorage.setItem("user", JSON.stringify(res.user));
+        toast.success(res.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.dark(err.message);
+        setLoading(false);
+      });
+  };
+  //Using Axios
   return (
-    <div className="container d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
-      <form className="card p-3" action="/login" style={{ minWidth: '40%' }} onSubmit={handleSubmit}>
-        <div className="card-body">
-          <h1 className="text-center mb-3">Sign in</h1>
-          <input
-            className="form-control mb-2"
-            type="email"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            placeholder="Email"
-          />
-          <div>
-            <input
-              className="form-control mb-2"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Password"
-            />
-          </div>
-          <div className="d-flex w-100 justify-content-center mb-2">
-            <button type="submit" className="btn flex-grow-1" style={{backgroundColor: '#198754', color: 'white'}}>Login</button>
-          </div>
-          <div className="d-flex w-100 justify-content-center">
-            <p className="me-3">Belum punya akun? </p>
-            <a className="text-decoration-none text-success" href="/register">Daftar Sekarang</a>
-          </div>
-        </div>
-      </form>
-    </div>
+    <Form
+      style={{ maxWidth: "800px", margin: "auto" }}
+      className="p-4"
+      onSubmit={Login}
+    >
+      <Alert variant="primary" className="mb-5 alertColor">
+        <p className="mb-0 lead">
+          <strong>Kunarto-Patsy-Dira</strong> Rental
+        </p>
+        <p className="mb-0">Selamat datang, Silahkan login.</p>
+      </Alert>
+      <InputFloatingForm
+        label="Email"
+        placeholder="Masukkan Email"
+        name="email"
+        type="email"
+        onChange={handleChange}
+      />
+      <InputFloatingForm
+        label="Password"
+        placeholder="Masukkan Password"
+        name="password"
+        type="password"
+        autoComplete="off"
+        onChange={handleChange}
+      />
+      <Button
+        type="submit"
+        disabled={isDisabled || loading}
+        className="mt-3 w-100 border-0 buttonSubmit btn-lg"
+      >
+        {loading ? (
+          <Spinner animation="border" variant="light" size="sm" />
+        ) : (
+          <span>Login</span>
+        )}
+      </Button>
+      <p className="text-end mt-2 text-white">
+        Belum Punya Akun? <Link to="/register">Klik Sini!</Link>
+      </p>
+    </Form>
   );
-}
+};
 
 export default InputFormLogin;
