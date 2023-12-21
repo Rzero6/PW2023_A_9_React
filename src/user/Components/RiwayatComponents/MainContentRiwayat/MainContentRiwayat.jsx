@@ -1,27 +1,36 @@
 import { Container, Row, Col, Card, Stack, Alert } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Loading } from "../../../../admin/components/loading/Loading";
-import { GetTransaksiByUserAndStatus } from "../../../../api/apiTransaksi";
+import { GetAllTransaksi } from "../../../../api/apiTransaksi";
+import ModalCreateReview from "../../../../admin/components/modals/ReviewCreateModal";
 const MainContentRiwayat = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [transaksiDone, setTransaksiDone] = useState([]);
+  const [user, setUser] = useState(JSON.parse(sessionStorage.getItem("user")));
   const [transaksiReviewed, setTransaksiReviewed] = useState([]);
-  const fetchData = async () => {
+  const fetchTransaksi = () => {
     setIsLoading(true);
-    try {
-      const transaksiSelesai = await GetTransaksiByUserAndStatus("selesai");
-      const transaksiDinilai = await GetTransaksiByUserAndStatus("dinilai");
-      console.log(transaksiSelesai.lenght);
-      setTransaksiDone(transaksiSelesai);
-      setTransaksiReviewed(transaksiDinilai);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-    }
+    GetAllTransaksi()
+      .then((response) => {
+        const filterDone = response.filter((item) => {
+          return item.status === "selesai" && item.id_peminjam === user.id;
+        });
+        const filterRated = response.filter((item) => {
+          return item.status === "dinilai" && item.id_peminjam === user.id;
+        });
+        console.log("Filtered Result:", filterRated);
+        setTransaksiDone(filterDone);
+        setTransaksiReviewed(filterRated);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
+
   useEffect(() => {
-    fetchData();
+    fetchTransaksi();
   }, []);
 
   return (
@@ -36,10 +45,24 @@ const MainContentRiwayat = () => {
           <div className="d-flex align-items-center justify-content-center">
             <Loading />
           </div>
-        ) : transaksiDone.lenght > 0 ? (
-          <Col>
-            <Card></Card>
-          </Col>
+        ) : transaksiDone.length > 0 ? (
+          transaksiDone.map((item) => (
+            <Col key={item.id}>
+              <Card>
+                <Card.Body>
+                  <Stack direction="horizontal" gap={3}>
+                    <p>Mobil: {item.mobil}</p>
+                    <p>Pickup: {item.dropoff}</p>
+                    <p>Dropoff: {item.dropoff}</p>
+                    <ModalCreateReview
+                      onClose={fetchTransaksi}
+                      transaksi={item}
+                    />
+                  </Stack>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))
         ) : (
           <Alert variant="secondary" className="mt-3 text-center">
             Belum ada yang selesai
@@ -56,10 +79,20 @@ const MainContentRiwayat = () => {
           <div className="d-flex align-items-center justify-content-center">
             <Loading />
           </div>
-        ) : transaksiReviewed.lenght > 0 ? (
-          <Col>
-            <Card></Card>
-          </Col>
+        ) : transaksiReviewed.length > 0 ? (
+          transaksiReviewed.map((item) => (
+            <Col key={item.id}>
+              <Card>
+                <Card.Body>
+                  <Stack direction="horizontal" gap={3}>
+                    <p>Mobil: {item.mobil}</p>
+                    <p>Pickup: {item.dropoff}</p>
+                    <p>Dropoff: {item.dropoff}</p>
+                  </Stack>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))
         ) : (
           <Alert variant="secondary" className="mt-3 text-center">
             Belum ada yang dinilai

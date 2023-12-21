@@ -42,9 +42,9 @@ const ModalCreateReview = ({ onClose, transaksi }) => {
   };
   return (
     <>
-      <Button variant="light" onClick={handleShow}>
+      <Button variant="primary" onClick={handleShow}>
         <FaPlusSquare className="mx-1 mb-1" />
-        Tambah
+        Review
       </Button>
       <Modal size="md" show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
@@ -54,7 +54,7 @@ const ModalCreateReview = ({ onClose, transaksi }) => {
           <Modal.Body>
             <InputForm
               type="number"
-              label="Rating"
+              label="Masukkan Rating 1-10"
               name="rating"
               placeholder="Masukkan Rating 1-10"
               onChange={handleChange}
@@ -87,7 +87,7 @@ const ModalCreateReview = ({ onClose, transaksi }) => {
                   Loading...
                 </>
               ) : (
-                <span>Simpan</span>
+                <span>Review</span>
               )}
             </Button>
           </Modal.Footer>
