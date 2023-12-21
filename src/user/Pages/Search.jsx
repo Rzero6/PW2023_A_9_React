@@ -17,18 +17,18 @@ const Search = () => {
     try {
       const mobilResponse = await GetAllMobil();
       const filteredMobil = mobilResponse.filter((item) => {
-        console.log(
-          item.disewa,
-          item.tipe,
-          item.id_cabang,
-          transaksi.tipe,
-          transaksi.id_cabang_pickup
-        );
-        return (
-          item.disewa === 0 &&
-          item.tipe === transaksi.tipe &&
-          parseInt(item.id_cabang) === parseInt(transaksi.id_cabang_pickup)
-        );
+        if (transaksi.tipe === "semua") {
+          return (
+            item.disewa === 0 &&
+            parseInt(item.id_cabang) === parseInt(transaksi.id_cabang_pickup)
+          );
+        } else {
+          return (
+            item.disewa === 0 &&
+            item.tipe === transaksi.tipe &&
+            parseInt(item.id_cabang) === parseInt(transaksi.id_cabang_pickup)
+          );
+        }
       });
       setMobil(filteredMobil);
       setIsLoading(false);

@@ -77,7 +77,7 @@ function CarSearchForm() {
     fetchData();
   }, []);
 
-  const [selectedTipe, setSelectedTipe] = useState("mpv");
+  const [selectedTipe, setSelectedTipe] = useState("semua");
   const handleSelectTipe = (event) => {
     setSelectedTipe(event.target.value);
     setfilteredMobil(mobil.filter((item) => item.tipe === selectedTipe));

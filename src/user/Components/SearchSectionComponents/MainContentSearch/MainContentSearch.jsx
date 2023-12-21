@@ -15,12 +15,13 @@ const MainContentSearch = ({ transaksi, mobil }) => {
             <Card>
               <img
                 src={getImageMobil(item.image)}
-                className="card-img w-100 h-100 object-fit-cover bg-light"
+                className="card-img object-fit-cover bg-light img-fluid"
                 alt="..."
+                style={{ width: "auto", height: "250px" }}
               />
               <Card.Body>
                 <Card.Title>{item.nama}</Card.Title>
-                <Card.Text>{item.harga_sewa}</Card.Text>
+                <Card.Text>Harga Sewa: Rp. {item.harga_sewa} per Hari</Card.Text>
                 <ModalCreateTransaksi mobil={item} transaksi={transaksi} />
               </Card.Body>
             </Card>

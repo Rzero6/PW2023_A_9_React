@@ -1,20 +1,19 @@
 import { Container, Row, Col, Card, Stack, Alert } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Loading } from "../../../../admin/components/loading/Loading";
-
+import { GetTransaksiByUserAndStatus } from "../../../../api/apiTransaksi";
 const MainContentRiwayat = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [transaksiDone, setTransaksiDone] = useState([]);
   const [transaksiReviewed, setTransaksiReviewed] = useState([]);
-
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const transaksiSelesai = await GetTransaksiByUserAndStatus("selesai");
       const transaksiDinilai = await GetTransaksiByUserAndStatus("dinilai");
+      console.log(transaksiSelesai.lenght);
       setTransaksiDone(transaksiSelesai);
       setTransaksiReviewed(transaksiDinilai);
-      setMobil(mobilResponse);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -43,7 +42,7 @@ const MainContentRiwayat = () => {
           </Col>
         ) : (
           <Alert variant="secondary" className="mt-3 text-center">
-            Belum ada yang disewa, ayo nyewa!
+            Belum ada yang selesai
           </Alert>
         )}
       </Row>

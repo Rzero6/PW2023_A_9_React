@@ -1,4 +1,5 @@
 export const tipeOptions = [
+  { value: "semua", label: "Semua" },
   { value: "mpv", label: "MPV" },
   { value: "suv", label: "SUV" },
   { value: "hatchback", label: "Hatchback" },

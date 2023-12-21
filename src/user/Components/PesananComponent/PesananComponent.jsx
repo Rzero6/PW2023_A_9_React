@@ -12,9 +12,12 @@ const PesananComponent = () => {
     setIsLoading(true);
     try {
       const transaksiResponse = await GetTransaksiByUserAndStatus("berjalan");
-      const mobilResponse = await GetMobilById(transaksiResponse.id_mobil);
-      setTransaksi(transaksiResponse);
-      setMobil(mobilResponse);
+      if (transaksiResponse.length > 0) {
+        console.log(transaksiResponse[0].id_mobil);
+        const mobilResponse = await GetMobilById(transaksiResponse[0].id_mobil);
+        setTransaksi(transaksiResponse[0]);
+        setMobil(mobilResponse);
+      }
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -25,7 +28,7 @@ const PesananComponent = () => {
     fetchData();
   }, []);
   return (
-    <Container>
+    <Container style={{ height: "90vh" }}>
       {isLoading ? (
         <div
           className="d-flex align-items-center justify-content-center"
@@ -41,24 +44,25 @@ const PesananComponent = () => {
                 <strong>Kamu Sedang Menyewa Mobil ini</strong>
               </h3>
             </Card.Title>
-            <div className="card mb-3">
+            <div className="d-flex justify-content-center">
               <img
                 src={getImageMobil(mobil.image)}
                 className="card-img-top"
                 alt="kaleb"
+                style={{ height: "40vh", width: "100vh", objectFit: "contain" }}
               />
-              <div className="card-body">
-                <h5 className="card-title center-text">{mobil.nama}</h5>
-                <p className="card-text center-text">
-                  Pick Up : {transaksi.pickup} - Drop Off : {transaksi.dropoff}
-                </p>
-                <p className="card-text center-text">
-                  <small className="text-body-secondary">
-                    Waktu PickUp: {transaksi.waktu_pickup} - Waktu DropOff:{" "}
-                    {transaksi.waktu_pickup}
-                  </small>
-                </p>
-              </div>
+            </div>
+            <div className="card-body">
+              <h5 className="card-title center-text">{mobil.nama}</h5>
+              <p className="card-text center-text">
+                Pick Up : {transaksi.pickup} - Drop Off : {transaksi.dropoff}
+              </p>
+              <p className="card-text center-text">
+                <small className="text-body-secondary">
+                  Waktu PickUp: {transaksi.waktu_pickup} - Waktu DropOff:{" "}
+                  {transaksi.waktu_pickup}
+                </small>
+              </p>
             </div>
           </Card.Body>
         </Card>

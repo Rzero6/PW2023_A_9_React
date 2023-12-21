@@ -32,7 +32,7 @@ export const UpdateUser = async (values) => {
   try {
     const response = await useAxios.patch(`/user/${values.id}`, values, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     });

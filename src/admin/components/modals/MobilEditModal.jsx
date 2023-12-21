@@ -106,7 +106,7 @@ const ModalEditMobil = ({ mobil, cabang, onClose }) => {
                         id="id_cabang"
                         name="id_cabang"
                         label="Cabang"
-                        value={cabang.length > 0 ? cabang[0].id : ""}
+                        value={selectedCabang}
                         onChange={handleSelectCabang}
                       >
                         {cabang.map((item) => (

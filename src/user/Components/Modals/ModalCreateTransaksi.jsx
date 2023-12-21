@@ -1,13 +1,28 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { Modal, Button, Row, Col, Form, Spinner } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Row,
+  Col,
+  Form,
+  Spinner,
+  Stack,
+  Alert,
+} from "react-bootstrap";
 import { getImageMobil } from "../../../api";
 import { useState, useEffect } from "react";
 import { CreateTransaksi } from "../../../api/apiTransaksi";
+import { GetReviewByMobilId } from "../../../api/apiReview";
+import { Loading } from "../../../admin/components/loading/Loading";
+import { Link, useNavigate } from "react-router-dom";
 const ModalCreateTransaksi = ({ mobil, transaksi }) => {
+  const navigate = useNavigate();
   const [selectedPembayaran, setSelectedPembayaran] = useState("Visa");
   const [show, setShow] = useState(false);
+  const [review, setReview] = useState([]);
   const [isPending, setIsPending] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const handleShow = () => {
     setShow(true);
   };
@@ -32,6 +47,7 @@ const ModalCreateTransaksi = ({ mobil, transaksi }) => {
         setIsPending(false);
         toast.success(response.message);
         handleClose();
+        navigate("/home/pesanan");
       })
       .catch((err) => {
         console.log(err);
@@ -39,13 +55,27 @@ const ModalCreateTransaksi = ({ mobil, transaksi }) => {
         toast.dark(JSON.stringify(err.message));
       });
   };
+  const fetchReviews = async () => {
+    setIsLoading(true);
+    try {
+      const reviewResponse = await GetReviewByMobilId(mobil.id);
+      setReview(reviewResponse);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchReviews();
+  }, []);
   return (
     <>
       <Button variant="primary" className="w-100" onClick={handleShow}>
         Sewa
       </Button>
 
-      <Modal size="lg" show={show} onHide={handleClose} centered>
+      <Modal size="lg" show={show} onHide={handleClose} centered scrollable>
         <Modal.Header closeButton>
           <Modal.Title>Sewa {mobil.nama}</Modal.Title>
         </Modal.Header>
@@ -66,33 +96,35 @@ const ModalCreateTransaksi = ({ mobil, transaksi }) => {
               </Col>
               <Col>
                 <Row>
-                  <Col>
-                    <p>{mobil?.harga_sewa}</p>
+                  <Col md={6}>
+                    <p>Harga Sewa: Rp.{mobil?.harga_sewa}/Hari</p>
                   </Col>
-                  <Col>
-                    <p>{mobil?.tipe}</p>
+                  <Col md={6}>
+                    <p>Tipe: {mobil?.tipe}</p>
                   </Col>
-                  <Col>
-                    <p>{mobil?.transmisi}</p>
+                  <Col md={6}>
+                    <p>Transmisi: {mobil?.transmisi}</p>
                   </Col>
-                  <Col>
-                    <p>{mobil?.bahan_bakar}</p>
+                  <Col md={6}>
+                    <p>Bahan Bakar: {mobil?.bahan_bakar}</p>
+                  </Col>
+                  <Col md={6}>
+                    <p>Tahun: {mobil?.tahun}</p>
+                  </Col>
+                  <Col md={6}>
+                    <p>No. Polisi: {mobil?.no_polisi}</p>
+                  </Col>
+                  <Col md={6}>
+                    <p>Kapasitas Tempat: {mobil?.jml_tempat_duduk}</p>
                   </Col>
                 </Row>
               </Col>
             </Row>
             <Row>
-              <p>{mobil?.nama}</p>
-              <Col md={6}>
-                <p>{mobil?.tahun}</p>
-              </Col>
-              <Col md={6}>
-                <p>{mobil?.jml_tempat_duduk}</p>
-              </Col>
-              <Col md={6}>
-                <p>{mobil?.no_polisi}</p>
-              </Col>
-              <Col md={6}>
+              <p>
+                <strong>{mobil?.nama}</strong>
+              </p>
+              <Col md={12}>
                 <Form.Select
                   value={selectedPembayaran}
                   onChange={handleSelectPembayaran}
@@ -103,6 +135,33 @@ const ModalCreateTransaksi = ({ mobil, transaksi }) => {
                 </Form.Select>
               </Col>
             </Row>
+            <Stack direction="horizontal" gap={3} className="mt-3">
+              <h1 className="h4 fw-bold mb-0 text-nowrap">Reviews</h1>
+              <hr className="border-top border-dark w-100" />
+              <div className="ms-auto text-nowrap"></div>
+            </Stack>
+
+            {isLoading ? (
+              <Loading />
+            ) : review.length > 0 ? (
+              <Row style={{ overflowY: "auto", maxHeight: "100px" }}>
+                {review.map((item, index) => (
+                  <Col key={item.id} md={12}>
+                    <Stack direction="horizontal" gap={3}>
+                      <p>{index + 1}.</p>
+                      <p>
+                        Rating: <strong>{item.rating}/10</strong>
+                      </p>
+                      <p>{item.komen}</p>
+                    </Stack>
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              <Alert variant="secondary" className="mt-3 text-center">
+                Belum ada Review....
+              </Alert>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
@@ -121,7 +180,7 @@ const ModalCreateTransaksi = ({ mobil, transaksi }) => {
                   Loading...
                 </>
               ) : (
-                <span>Simpan</span>
+                <span>Sewa</span>
               )}
             </Button>
           </Modal.Footer>
