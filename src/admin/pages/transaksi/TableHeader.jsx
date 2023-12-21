@@ -50,19 +50,16 @@ export const tableHeader = [
     id: "status",
     label: "Status",
     minWidth: 50,
-    format: (value) => value.charAt(0).toUpperCase() + value.slice(1),
   },
   {
     id: "metode_pembayaran",
     label: "Pembayaran",
     minWidth: 50,
-    format: (value) => value.charAt(0).toUpperCase() + value.slice(1),
   },
   {
     id: "details",
     label: "Tambahan",
     minWidth: 130,
-    format: (value) => value.charAt(0).toUpperCase() + value.slice(1),
   },
   {
     id: "created_at",
