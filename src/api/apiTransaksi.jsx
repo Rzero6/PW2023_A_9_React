@@ -43,7 +43,7 @@ export const GetTransaksiById = async (id) => {
 
 export const GetTransaksiByUserAndStatus = async (status) => {
   try {
-    const response = await useAxios.get(`/transaksi/${status}`, {
+    const response = await useAxios.get(`/transaksi/status/${status}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,

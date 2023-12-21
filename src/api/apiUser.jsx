@@ -32,7 +32,7 @@ export const UpdateUser = async (values) => {
   try {
     const response = await useAxios.patch(`/user/${values.id}`, values, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     });
@@ -48,6 +48,20 @@ export const DeleteUser = async (id) => {
     const response = await useAxios.delete(`/user/${id}`, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const UpdateProfilPic = async (data) => {
+  try {
+    const response = await useAxios.post(`/user`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     });

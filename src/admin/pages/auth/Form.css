@@ -1,7 +1,7 @@
 body {
-  background-image: url("https://images7.alphacoders.com/133/1330312.png"); /* Replace 'path/to/your/image.jpg' with the path to your image */
-  background-position: center; /* Positions the background image */
-  background-size: cover; /* Adjusts the size of the background image */
+  background-image: url("https://images7.alphacoders.com/133/1330312.png");
+  background-position: center;
+  background-size: cover;
 }
 
 .buttonSubmit {

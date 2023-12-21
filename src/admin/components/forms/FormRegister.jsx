@@ -1,8 +1,8 @@
 import { Button, Alert, Spinner, Form } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import InputFloatingForm from "./InputFloatingForm";
+import InputFloatingForm from "./InputFloatingFormLight";
 import { SignUp } from "../../../api/apiAuthAdmin";
 
 const FormRegister = () => {
@@ -12,20 +12,39 @@ const FormRegister = () => {
     email: "",
     password: "",
   });
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [loading, setLoading] = useState(false);
   const handleChange = (event) => {
-    setData({ ...data, [event.target.name]: event.target.value });
+    setData({
+      ...data,
+      [event.target.name]: event.target.value,
+    });
   };
+  useEffect(() => {
+    if (
+      data.nama.trim().length > 0 &&
+      data.email.trim().length > 0 &&
+      data.password.length > 7
+    ) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [data]);
   //Using Axios
   const Register = (event) => {
+    setLoading(true);
     event.preventDefault();
     SignUp(data)
       .then((res) => {
+        setLoading(false);
         navigate("/admin");
         toast.success(res.message);
       })
       .catch((err) => {
         console.log(err);
         toast.error(err.message);
+        setLoading(false);
       });
   };
   //Using Axios
@@ -65,8 +84,16 @@ const FormRegister = () => {
         minlength="8"
         required
       />
-      <Button type="submit" className="mt-3 w-100 border-0 buttonSubmit btn-lg">
-        Register
+      <Button
+        type="submit"
+        className="mt-3 w-100 border-0 buttonSubmit btn-lg"
+        disabled={isDisabled || loading}
+      >
+        {loading ? (
+          <Spinner animation="border" variant="light" size="sm" />
+        ) : (
+          <span>Register</span>
+        )}
       </Button>
       <p className="text-end text-white mt-2">
         Already Have an Account? <Link to="/admin">Click Here!</Link>
